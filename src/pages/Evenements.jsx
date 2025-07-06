@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Evenements() {
+export default function Evenements() {
     const evenements = [
         { id: 1, titre: "Fête de la Musique", date: "21 juin", lieu: "Centre culturel", image: "/img/musique.jpg" },
         { id: 2, titre: "Danse de l'Ekpe", date: "7 juillet", lieu: "Palais royal", image: "/img/ekpe.jpg" },

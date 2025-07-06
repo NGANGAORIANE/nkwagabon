@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Restaurants() {
+export default function Restaurants() {
     const restaurants = [
         { id: 1, nom: 'Restaurant Nyembwé', specialite: 'Poulet sauce graine', km: 5, image: '/img/nyembwe.jpg' },
         { id: 2, nom: 'Chez Maman Jeanne', specialite: 'Feuilles de manioc', km: 7, image: '/img/manioc.jpg' },
