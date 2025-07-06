@@ -1,0 +1,9 @@
+body {
+  background-color: #f8f9fa;
+  /* couleur de fond claire */
+}
+
+h1,
+h2 {
+  font-family: 'Segoe UI', sans-serif;
+}
