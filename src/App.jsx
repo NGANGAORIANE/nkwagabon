@@ -6,6 +6,7 @@ import Connexions from "./pages/Connexion";
 import Inscription from "./pages/Inscription";
 import Compte from "./pages/Compte";
 import Admin from "./pages/Admin";
+import Places from "./pages/Places";
 
 
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/register" element={<Inscription />} />
         <Route path="/compte" element={<Compte />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/places" element={<Places />} />
       </Routes>
     </BrowserRouter>
   );
