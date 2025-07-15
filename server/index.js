@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import restaurantRoutes from './routes/restaurants.js';
-import evenementsRoutes from './routes/evenements.js';
+import eventsRoutes from './routes/events.js';
 import placesRoutes from './routes/places.js';
 
 const app = express();
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/restaurants', restaurantRoutes);
-app.use('/evenements', evenementsRoutes);
+app.use('/events', eventsRoutes);
 app.use('/places', placesRoutes);
 
 app.listen(port, () => {

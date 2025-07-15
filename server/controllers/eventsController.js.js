@@ -1,12 +1,12 @@
 import { supabase } from '../supabase.js';
 
-export async function getEvenements(req, res) {
+export async function getEvents(req, res) {
     const { data, error } = await supabase.from('events').select('*');
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
 }
 
-export async function insertEvenement(req, res) {
+export async function insertEvents(req, res) {
     const { titre, date, lieu, image } = req.body;
     const { data, error } = await supabase
         .from('events')
