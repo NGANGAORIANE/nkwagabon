@@ -1,8 +1,10 @@
 
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://sumjnepbalkjwfawwvwz.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1bWpuZXBiYWxrandmYXd3dnd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4MDkxMDEsImV4cCI6MjA2NzM4NTEwMX0.HKZPIp0lvEmqN2PNAD-A6fq9sxfJYfy6bOPuQWgnK1w'
-const supabase = createClient(supabaseUrl, supabaseKey)
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function insertion(body) {
 
