@@ -13,16 +13,18 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar /> {/* Toujours affichée */}
-      <Routes>
-        <Route path="/" element={<Accueil />} />
-        <Route path="/restaurants" element={<Restaurants />} />
-        <Route path="/events" element={<Evenements />} />
-        <Route path="/login" element={<Connexions />} />
-        <Route path="/sign" element={<Inscription />} />
-        <Route path="/compte" element={<Compte />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/places" element={<Places />} />
-      </Routes>
+      <main className="container-fluid py-4">
+        <Routes>
+          <Route path="/" element={<Accueil />} />
+          <Route path="/restaurants" element={<Restaurants />} />
+          <Route path="/events" element={<Evenements />} />
+          <Route path="/login" element={<Connexions />} />
+          <Route path="/sign" element={<Inscription />} />
+          <Route path="/compte" element={<Compte />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/places" element={<Places />} />
+        </Routes>
+      </main>
     </BrowserRouter>
   );
 }
