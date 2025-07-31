@@ -1,28 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { trackVisit } from '../components/trackVisit';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 export default function Events() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     useEffect(() => {
-        fetch('http://localhost:3000/events')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erreur lors de la récupération des événements");
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Événements reçus :", data);
-                setData(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                setLoading(false);
-            });
+        let isMounted = true; 
+
+        // 1. Suivi utilisateur et visite
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        try {
+            await trackVisit("Événements", user ? user.uid : null);
+        } catch (err) {
+            console.error("Erreur lors du tracking :", err);
+        }
+        });
+
+        // 2. Récupération des événements
+        const fetchEvents = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/events');
+            if (!response.ok) throw new Error("Erreur lors de la récupération des événements");
+
+            const events = await response.json();
+            if (isMounted) {
+            setData(events);
+            setLoading(false);
+            }
+        } catch (err) {
+            if (isMounted) {
+            setError(err.message);
+            setLoading(false);
+            }
+        }
+        };
+
+        fetchEvents();
+
+        return () => {
+        isMounted = false;
+        unsubscribe();
+        };
     }, []);
 
     return (

@@ -56,6 +56,7 @@ export default function Inscription() {
                     <input type="text" placeholder="Nom" className="form-control mb-3" onChange={(e) => setName(e.target.value)} />
                     <input type="email" placeholder="Email" className="form-control mb-3" onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Mot de passe" className="form-control mb-3" onChange={(e) => setPassword(e.target.value)} />
+                    <p>Vous avez déjà un compte? <a href="/login">Se connecter</a></p>
                     <button className="btn btn-success w-100">Créer un compte</button>
                 </form>
                 {currentUser && (
