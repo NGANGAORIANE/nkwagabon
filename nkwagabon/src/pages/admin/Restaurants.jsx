@@ -3,11 +3,14 @@ import { getDoc, doc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../firebaseConfig';
+import MenuManager from './MenuManager';
 
 export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openMenus, setOpenMenus] = useState({});
+
 
   const [isAdmin, setIsAdmin] = useState(null);
   const navigate = useNavigate();
@@ -109,6 +112,9 @@ export default function Restaurants() {
     setEditId(null);
     fetchRestaurants();
   };
+  const toggleMenu = (id) => {
+    setOpenMenus((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   if (loading) return <p>Chargement des restaurants...</p>;
   if (error) return <p className="text-danger">{error}</p>;
@@ -204,28 +210,43 @@ export default function Restaurants() {
           </thead>
           <tbody>
             {restaurants.map((r) => (
-              <tr key={r.id}>
-                <td>{r.nom}</td>
-                <td>{r.speciality}</td>
-                <td>{r.description}</td>
-                <td>{r.adress}</td>
-                <td>{r.number}</td>
-                <td>
-                  <img
-                    src={r.photo}
-                    alt={r.nom}
-                    style={{ width: '80px', height: '60px', objectFit: 'cover' }}
-                  />
-                </td>
-                <td>
-                  <button onClick={() => handleEdit(r)} className="btn btn-sm btn-warning me-2">
-                    Modifier
-                  </button>
-                  <button onClick={() => handleDelete(r.id)} className="btn btn-sm btn-danger">
-                    Supprimer
-                  </button>
-                </td>
-              </tr>
+              <React.Fragment key={r.id}>
+                <tr>
+                  <td>{r.nom}</td>
+                  <td>{r.speciality}</td>
+                  <td>{r.description}</td>
+                  <td>{r.adress}</td>
+                  <td>{r.number}</td>
+                  <td>
+                    <img
+                      src={r.photo}
+                      alt={r.nom}
+                      style={{ width: '80px', height: '60px', objectFit: 'cover' }}
+                    />
+                  </td>
+                  <td>
+                    <button onClick={() => handleEdit(r)} className="btn btn-sm btn-warning me-2">
+                      Modifier
+                    </button>
+                    <button onClick={() => handleDelete(r.id)} className="btn btn-sm btn-danger">
+                      Supprimer
+                    </button>
+                    <button
+                      onClick={() => toggleMenu(r.id)}
+                      className="btn btn-sm btn-primary ms-2"
+                    >
+                      Menus
+                    </button>
+                  </td>
+                </tr>
+                {openMenus[r.id] && (
+                  <tr>
+                    <td colSpan="7">
+                      <MenuManager restaurantId={r.id} />
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>

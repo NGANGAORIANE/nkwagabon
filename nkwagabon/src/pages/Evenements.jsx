@@ -3,11 +3,15 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import { trackVisit } from '../components/trackVisit';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import {fetchFavoris, addFavori, removeFavori} from './apiFavori';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 export default function Events() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const [favoris, setFavoris] = useState([]);
     useEffect(() => {
         let isMounted = true; 
 
@@ -15,6 +19,16 @@ export default function Events() {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
         try {
             await trackVisit("Événements", user ? user.uid : null);
+            if (user && isMounted) {
+                setUserId(user.uid);
+
+                try {
+                    const favorisData = await fetchFavoris(user.uid);
+                    setFavoris(favorisData.map(f => f.element_id));
+                } catch (err) {
+                    console.error('Erreur lors du chargement des favoris :', err);
+                }
+            }
         } catch (err) {
             console.error("Erreur lors du tracking :", err);
         }
@@ -46,6 +60,24 @@ export default function Events() {
         unsubscribe();
         };
     }, []);
+    //les favoris
+    const toggleFavori = async (evenementId) => {
+        if (!userId) return;
+
+        const type = 'lieu';
+
+        try {
+            if (favoris.includes(evenementId)) {
+                await removeFavori({ user_id: userId, element_id: evenementId, type });
+                setFavoris(prev => prev.filter(id => id !== evenementId));
+            } else {
+                await addFavori({ user_id: userId, element_id: evenementId, type });
+                setFavoris(prev => [...prev, evenementId]);
+            }
+        } catch (err) {
+            console.error("Erreur lors de la mise à jour des favoris", err);
+        }
+    };
 
     return (
         <div className="container py-4">
@@ -61,6 +93,23 @@ export default function Events() {
                     {data.map(e => (
                         <div key={e.id} className="col-md-6 mb-4">
                             <div className="card h-100">
+                                <div
+                                style={{
+                                    position: 'absolute',
+                                    top: '10px',
+                                    right: '10px',
+                                    zIndex: 10,
+                                    fontSize: '1.5rem',
+                                    color: 'red',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    toggleFavori(e.id);
+                                }}
+                                >
+                                {favoris.includes(e.id) ? <FaHeart /> : <FaRegHeart />}
+                                </div>
                                 <img src={e.photo} className="card-img-top" alt={e.name} />
                                 <div className="card-body">
                                     <h5 className="card-title">{e.name}</h5>
